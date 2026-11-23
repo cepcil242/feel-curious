@@ -10,6 +10,13 @@ import { dirname } from "node:path";
 const ENTRY =
   "Every night at 3:14, the lighthouse on the empty coast flashes twice, then once, then twice again. No ship has passed in forty years. The keeper left in 1986, and the logbook ends mid-sentence — but the light never learned to stop asking who is out there.";
 
+// The gate requires 1–280 Unicode code points; fail loudly instead of
+// writing an entry the scorer would mark invalid.
+const entryLength = [...ENTRY].length;
+if (entryLength < 1 || entryLength > 280) {
+  throw new Error(`entry must be 1-280 characters, got ${entryLength}`);
+}
+
 const outPath = process.env.ENTRY_OUTPUT_PATH ?? "/output/entry.txt";
 
 mkdirSync(dirname(outPath), { recursive: true });
